@@ -27,3 +27,19 @@ WITH
 	FROM Group_Clients_From_Orders o 
 	INNER JOIN Customers c ON c.customerID = o.CustomerID
 
+
+--3. Намери всички клиенти, които са направили поръчки само през януари и март 2024 г., но не и през февруари.
+
+		SELECT o.CustomerID, o.OrderDate, o.TotalAmount, c.firstName, c.LastName
+		FROM Orders o 
+		inner join Customers c ON o.CustomerID = c.CustomerID 
+		WHERE (YEAR(o.OrderDate) = '2024' AND MONTH(o.OrderDate) = 1 
+			 OR YEAR(o.OrderDate) = '2024' AND MONTH(o.OrderDate) = 3)
+			 AND NOT EXISTS (
+								SELECT 1 
+								FROM Orders o2
+								WHERE o.CustomerID = o2.CustomerID
+								    AND YEAR(o.OrderDate) = '2024' AND MONTH(o.OrderDate) = 2
+							)
+		ORDER BY o.OrderDate ASC;
+
