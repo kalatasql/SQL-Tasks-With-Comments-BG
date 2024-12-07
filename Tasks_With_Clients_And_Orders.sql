@@ -43,3 +43,10 @@ WITH
 							)
 		ORDER BY o.OrderDate ASC;
 
+--4. Групирай поръчките по месеци и изчисли общата сума на поръчките за всеки месец.
+
+SELECT YEAR(OrderDate) as [Year],  DATENAME(MONTH, OrderDate) AS [Month], SUM(TotalAmount) AS [Total_Amount]
+FROM Orders 
+GROUP BY YEAR(OrderDate), MONTH(OrderDate), DATENAME(MONTH, OrderDate)
+ORDER BY YEAR(OrderDate) DESC, MONTH(OrderDate)
+
