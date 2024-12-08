@@ -89,3 +89,14 @@ ORDER BY YEAR(OrderDate) DESC, MONTH(OrderDate)
 			   WHERE c.CustomerID = o2.CustomerID
 			   AND o2.OrderDate > DATEADD(month, -3, getdate())
 			   )
+
+--7. Клиенти, които никога не са правили поръчка над 500 лв: Изведи клиентите, които никога не са правили поръчка над 500 лв.
+
+SELECT c.CustomerID
+FROM Customers c
+WHERE NOT EXISTS (
+		  SELECT 1
+		  FROM Orders o
+		  WHERE c.CustomerID = o.CustomerID
+		  AND TotalAmount > 500
+		 )
