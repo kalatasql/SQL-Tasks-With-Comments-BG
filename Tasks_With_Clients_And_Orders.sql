@@ -50,3 +50,20 @@ FROM Orders
 GROUP BY YEAR(OrderDate), MONTH(OrderDate), DATENAME(MONTH, OrderDate)
 ORDER BY YEAR(OrderDate) DESC, MONTH(OrderDate)
 
+--5. Месец с най-много клиенти:
+--Намери месеца, в който са поръчвали най-много уникални клиенти.
+	
+	WITH 
+	ORDER_BY_MONTH 
+	AS
+	(
+	SELECT 
+		  MONTH(o.OrderDate) as [month],
+		  count(distinct CustomerID) AS UNIQU
+	FROM Orders o
+        GROUP BY MONTH(o.OrderDate)
+	)
+	SELECT *
+	FROM ORDER_BY_MONTH
+	WHERE UNIQU = (SELECT MAX(UNIQU) from ORDER_BY_MONTH)
+
