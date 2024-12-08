@@ -67,3 +67,25 @@ ORDER BY YEAR(OrderDate) DESC, MONTH(OrderDate)
 	FROM ORDER_BY_MONTH
 	WHERE UNIQU = (SELECT MAX(UNIQU) from ORDER_BY_MONTH)
 
+--6. Клиенти, които не са поръчвали през последните 3 месеца: Изведи всички клиенти, които не са направили поръчка през последните три месеца.
+
+     -- Начин 1: 
+	  WITH 
+		  LAST_ORDERS AS 
+	  (SELECT 
+	  CustomerID, max(OrderDate) as Last_Order_DT
+	  FROM Orders 
+	  GROUP BY CustomerID)
+
+	  SELECT c.CustomerID, c.FirstName, c.LastName    -- DISTINCT o.CustomerID, o.OrderDate
+	  FROM Customers c
+	  LEFT JOIN LAST_ORDERS lo ON lo.CustomerID = c.CustomerID
+	  WHERE lo.Last_Order_DT < DATEADD(month, -3, getdate())
+    -- Начин 2:
+	 SELECT * 
+	 FROM Customers c
+	 WHERE NOT EXISTS (SELECT 1
+			   FROM Orders o2
+			   WHERE c.CustomerID = o2.CustomerID
+			   AND o2.OrderDate > DATEADD(month, -3, getdate())
+			   )
