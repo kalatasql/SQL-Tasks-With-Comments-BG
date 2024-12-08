@@ -100,3 +100,14 @@ WHERE NOT EXISTS (
 		  WHERE c.CustomerID = o.CustomerID
 		  AND TotalAmount > 500
 		 )
+
+--8. Клиенти с поръчки в последната седмица от всеки месец: Намери клиентите, които са направили поне една поръчка през последната седмица на всеки месец.
+
+SELECT *
+FROM Customers c
+WHERE EXISTS (
+	      SELECT 1
+	      FROM Orders o
+	      WHERE o.CustomerID = c.CustomerID
+	      AND o.OrderDate BETWEEN DATEADD(DAY, -6, EOMONTH(OrderDate)) AND EOMONTH(OrderDate)
+	     )
