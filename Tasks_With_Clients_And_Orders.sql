@@ -111,3 +111,18 @@ WHERE EXISTS (
 	      WHERE o.CustomerID = c.CustomerID
 	      AND o.OrderDate BETWEEN DATEADD(DAY, -6, EOMONTH(OrderDate)) AND EOMONTH(OrderDate)
 	     )
+----9. Най-големи поръчки за всеки клиент
+----Намерете най-голямата поръчка (по стойност) за всеки клиент и извеждайте следната информация:
+
+----CustomerID: ID на клиента
+----OrderID: ID на поръчката с най-голяма стойност
+----OrderDate: Датата на поръчката с най-голяма стойност.
+
+SELECT *
+FROM (
+SELECT 
+	  o.CustomerID, o.OrderID, o.totalAmount, o.OrderDate,
+	  ROW_NUMBER() OVER(PARTITION BY o.CustomerID ORDER by o.totalamount DESC, o.OrderDate DESC) ROWN
+FROM 
+Orders o) TBL
+WHERE TBL.ROWN = 1
