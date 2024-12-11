@@ -126,3 +126,17 @@ SELECT
 FROM 
 Orders o) TBL
 WHERE TBL.ROWN = 1
+
+----Задача 10: Изчисляване на средния приход на клиент за всяка година
+----Задачата е да показва средния приход за всяка година за всеки клиент. Ще използваме GROUP BY за клиентите и годината на поръчката.
+
+SELECT 
+    CustomerID, 
+    EXTRACT(YEAR FROM OrderDate) AS Year, 
+    AVG(Amount) AS AverageAmount
+FROM 
+    Orders
+GROUP BY 
+    CustomerID, EXTRACT(YEAR FROM OrderDate)
+ORDER BY 
+    CustomerID, Year;
